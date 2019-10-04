@@ -13,25 +13,32 @@
 #newt version
 #
 ##https://mynewt.apache.org/latest/tutorials/blinky/nRF52.html
-newt new Mynewt_Nrf52_Test2
-cd Mynewt_Nrf52_Test2
-newt upgrade
+#newt new Mynewt_Nrf52_Test
+#cd Mynewt_Nrf52_Test
+#newt upgrade
 
-newt target create nrf52_boot
-newt target set nrf52_boot app=@mcuboot/boot/mynewt
-newt target set nrf52_boot bsp=@apache-mynewt-core/hw/bsp/nordic_pca10056
-newt target set nrf52_boot build_profile=optimized
 
-newt target create nrf52_blinky
-newt target set nrf52_blinky app=apps/blinky
-newt target set nrf52_blinky bsp=@apache-mynewt-core/hw/bsp/nordic_pca10056
-newt target set nrf52_blinky build_profile=debug
+#Board von Marc
+selectedBsp=nordic_pca10056
+#selectedBsp=nucleo-f030r8
+#selectedBsp=stm32f3discovery
+
+
+newt target create "${selectedBsp}boot"
+newt target set "${selectedBsp}boot" app=@mcuboot/boot/mynewt
+newt target set "${selectedBsp}boot" bsp="@apache-mynewt-core/hw/bsp/${selectedBsp}"
+newt target set "${selectedBsp}boot" build_profile=optimized
+
+newt target create "${selectedBsp}blinky"
+newt target set "${selectedBsp}blinky" app=apps/blinky
+newt target set "${selectedBsp}blinky" bsp="@apache-mynewt-core/hw/bsp/${selectedBsp}"
+newt target set "${selectedBsp}blinky" build_profile=debug
 
 
 newt target show
-newt build nrf52_boot
-newt build nrf52_blinky
-newt create-image nrf52_blinky 1.0.0
+newt build "${selectedBsp}boot"
+newt build "${selectedBsp}blinky"
+newt create-image "${selectedBsp}blinky" 1.0.0
 
-newt load nrf52_boot
-newt load nrf52_blinky
+newt load "${selectedBsp}boot"
+newt load "${selectedBsp}blinky"
